@@ -31,6 +31,19 @@ export const GameService = {
       } while (field[cell.x][cell.y] === EFieldState.MINE);
 
       field[cell.x][cell.y] = EFieldState.MINE;
+
+      for (let x = Math.max(0, cell.x - 1); x <= Math.min(size - 1, cell.x + 1); x++) {
+        for (let y = Math.max(0, cell.y - 1); y <= Math.min(size - 1, cell.y + 1); y++) {
+          if (typeof field[x][y] === 'number') {
+            field[x][y] = Number(field[x][y]) + 1;
+          }
+
+          if (field[x][y] === EFieldState.EMPTY) {
+            field[x][y] = 1;
+          }
+
+        }
+      }
     }
 
     return field;
