@@ -1,0 +1,13 @@
+.cell {
+  width: $cell-size;
+  height: $cell-size;
+  margin: 5px;
+}
+
+.closed {
+  background-color: $closed-cell-color;
+}
+
+.opened {
+  background-color: $opened-cell-color;
+}
