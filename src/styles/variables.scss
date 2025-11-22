@@ -1,4 +1,18 @@
+@use "sass:map";
+
 $default-bg-color: #DAD3D2;
 $cell-size: 50px;
 $closed-cell-color: #C0B5B5;
-$opened-cell-color: #FFF;
+$opened-cell-color: #f0f0f0;
+$error-color: #D8474A;
+
+$number-colors: (
+  1: #0000F7,
+  2: #027701,
+  3: #EC0001,
+  4: #000080,
+  5: #800000,
+  6: #008080,
+  7: #000000,
+  8: #707070,
+)

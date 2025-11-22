@@ -2,7 +2,7 @@ import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux
 import { configureStore, createSlice, type Slice } from '@reduxjs/toolkit';
 import { GameService } from '@/services/game';
 import { BASE_NUMBER } from '@/constants';
-import type { EUserFieldState, TFieldState } from '@/types';
+import { EUserFieldState, type TFieldState } from '@/types';
 
 export interface IGameSlice {
   size: number;
@@ -14,20 +14,15 @@ const gameSlice: Slice<IGameSlice> = createSlice({
   name: 'playingField',
   initialState: { size: BASE_NUMBER, minefield: GameService.createFilledField(), userField: GameService.createUserField() },
   reducers: {
-    // increment: state => {
-    //   state.value += 1;
-    // },
-    // decrement: state => {
-    //   state.value -= 1;
-    // },
-    // incrementByAmount: (state, action) => {
-    //   state.value += action.payload;
-    // },
+    openCell: (state, action) => {
+      const { row, column } = action.payload;
+      state = GameService.openCell(row, column, state);
+    }
   },
 });
 
 // Экшены
-// export const { increment, decrement, incrementByAmount } = mineSlice.actions;
+export const { openCell } = gameSlice.actions;
 
 // Store
 export const store = configureStore({

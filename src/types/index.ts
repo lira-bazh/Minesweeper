@@ -14,4 +14,5 @@ export enum EUserFieldState {
   OPENED = `opened`,
   CLOSED = `closed`,
   FLAG = `flag`,
+  BANG = `bang`,
 }

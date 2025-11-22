@@ -1,6 +1,7 @@
 import { EFieldState, EUserFieldState } from '@/types';
 import type { TFieldState, CellCoordinates } from '@/types';
 import { BASE_NUMBER } from '@/constants';
+import type { IGameSlice } from '@/store';
 
 export const GameService = {
   getRandomCell(size: number): CellCoordinates {
@@ -41,7 +42,6 @@ export const GameService = {
           if (field[x][y] === EFieldState.EMPTY) {
             field[x][y] = 1;
           }
-
         }
       }
     }
@@ -51,5 +51,19 @@ export const GameService = {
 
   createUserField(size: number = BASE_NUMBER): EUserFieldState[][] {
     return this.createEmptyField(size, EUserFieldState.CLOSED);
+  },
+
+  openCell(row: number, column: number, state: IGameSlice): IGameSlice {
+    // const userCell = state.userField[row][column];
+    const mineCell = state.minefield[row][column];
+
+    if (mineCell === EFieldState.MINE) {
+      state.userField = state.userField.map(row => row.map(() => EUserFieldState.OPENED));
+      state.userField[row][column] = EUserFieldState.BANG;
+    } else {
+      state.userField[row][column] = EUserFieldState.OPENED;
+    }
+
+    return state;
   },
 };

@@ -1,13 +1,40 @@
+@use "sass:map";
+@use 'sass:color';
+
 .cell {
   width: $cell-size;
   height: $cell-size;
   margin: 5px;
+  background-color: $opened-cell-color;
 }
 
 .closed {
   background-color: $closed-cell-color;
+  cursor: pointer;
+
+  &:hover {
+    background-color: color.scale($closed-cell-color, $lightness: -5%);
+  }
+
+  &:active {
+    background-color: color.scale($closed-cell-color, $lightness: -10%);
+  }
 }
 
-.opened {
-  background-color: $opened-cell-color;
+.bang {
+  background-color: $error-color;
+}
+
+.numberInfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: calc($cell-size * 0.8);
+  font-weight: bold;
+
+  @for $i from 1 through 8 {
+    &-#{$i} {
+      color: map.get($number-colors, $i);
+    }
+  }
 }
