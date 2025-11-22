@@ -21,6 +21,19 @@ export const GameService = {
     return field;
   },
 
+  neighborCellTraversal(
+    size: number,
+    row: number,
+    column: number,
+    callback: (x: number, y: number) => void,
+  ): void {
+    for (let x = Math.max(0, row - 1); x <= Math.min(size - 1, row + 1); x++) {
+      for (let y = Math.max(0, column - 1); y <= Math.min(size - 1, column + 1); y++) {
+        callback(x, y);
+      }
+    }
+  },
+
   createFilledField(size: number = BASE_NUMBER, numMines: number = BASE_NUMBER): TFieldState[][] {
     const field = this.createEmptyField<TFieldState>(size, EFieldState.EMPTY);
 
@@ -33,17 +46,15 @@ export const GameService = {
 
       field[cell.x][cell.y] = EFieldState.MINE;
 
-      for (let x = Math.max(0, cell.x - 1); x <= Math.min(size - 1, cell.x + 1); x++) {
-        for (let y = Math.max(0, cell.y - 1); y <= Math.min(size - 1, cell.y + 1); y++) {
-          if (typeof field[x][y] === 'number') {
-            field[x][y] = Number(field[x][y]) + 1;
-          }
-
-          if (field[x][y] === EFieldState.EMPTY) {
-            field[x][y] = 1;
-          }
+      this.neighborCellTraversal(size, cell.x, cell.y, (x, y) => {
+        if (typeof field[x][y] === 'number') {
+          field[x][y] = Number(field[x][y]) + 1;
         }
-      }
+
+        if (field[x][y] === EFieldState.EMPTY) {
+          field[x][y] = 1;
+        }
+      });
     }
 
     return field;
@@ -53,15 +64,30 @@ export const GameService = {
     return this.createEmptyField(size, EUserFieldState.CLOSED);
   },
 
+  openEmptyCell(row: number, column: number, state: IGameSlice): IGameSlice {
+    if (state.userField[row][column] === EUserFieldState.CLOSED) {
+      if (state.minefield[row][column] === EFieldState.EMPTY) {
+        state.userField[row][column] = EUserFieldState.OPENED;
+
+        this.neighborCellTraversal(state.size, row, column, (x, y) => {
+          state = this.openEmptyCell(x, y, state);
+        });
+      } else {
+        state.userField[row][column] = EUserFieldState.OPENED;
+      }
+    }
+
+    return state;
+  },
+
   openCell(row: number, column: number, state: IGameSlice): IGameSlice {
-    // const userCell = state.userField[row][column];
     const mineCell = state.minefield[row][column];
 
     if (mineCell === EFieldState.MINE) {
       state.userField = state.userField.map(row => row.map(() => EUserFieldState.OPENED));
       state.userField[row][column] = EUserFieldState.BANG;
     } else {
-      state.userField[row][column] = EUserFieldState.OPENED;
+      state = this.openEmptyCell(row, column, state);
     }
 
     return state;
