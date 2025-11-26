@@ -15,4 +15,5 @@ export enum EUserFieldState {
   CLOSED = `closed`,
   FLAG = `flag`,
   BANG = `bang`,
+  PRESS = `press`,
 }

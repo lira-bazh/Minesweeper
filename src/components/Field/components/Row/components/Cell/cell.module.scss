@@ -1,26 +1,25 @@
 @use "sass:map";
-@use 'sass:color';
 
 .cell {
   width: $cell-size;
   height: $cell-size;
-  background-color: $opened-cell-color;
+  background-color: var(--opened-cell-bcg);
 }
 
 .closed {
-  background-color: $closed-cell-color;
+  background-color: var(--closed-cell);
   cursor: pointer;
 
   &:hover {
-    background-color: color.scale($closed-cell-color, $lightness: -5%);
-  }
-
-  &:active {
-    background-color: color.scale($closed-cell-color, $lightness: -10%);
+    background-color: var(--closed-cell-hover);
   }
 }
 
-.bang {
+.press {
+  background-color: var(--closed-cell-hover);
+}
+
+.bang, .errorFlag {
   background-color: $error-color;
 }
 

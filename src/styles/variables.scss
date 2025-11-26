@@ -1,12 +1,24 @@
 @use "sass:map";
 
-$default-bg-color: #DAD3D2;
 $cell-size: 50px;
-$closed-cell-color: #C0B5B5;
-$opened-cell-color: #f0f0f0;
+
+$default-bg-color: #DAD3D2;
+$dark-bg-color: #282A2E;
+
+$color-white: #fff;
+$color-black: #000;
+$color-grey-1: #999;
+$color-grey-2: #666;
+
+$color-beige-0: #f0f0f0;
+$color-beige-1: #e3dede;
+$color-beige-2: #C0B5B5;
+$color-beige-3: #b4a7a7;
+$color-beige-4: #a99999;
+$color-beige-5: #9d8c8c;
+$color-beige-6: #857171;
+
 $error-color: #D8474A;
-$icon-color: #000;
-$icon-hover-color: #444;
 
 $number-colors: (
   1: #0000F7,

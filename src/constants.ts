@@ -1,1 +1,1 @@
-export const BASE_NUMBER = 5;
+export const BASE_NUMBER = 10;

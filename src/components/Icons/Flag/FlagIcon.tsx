@@ -5,9 +5,9 @@ export const FlagIcon = () => {
       <path
         d="M5 21V17M5 17V3L20 10L5 17Z"
         stroke="#000000"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

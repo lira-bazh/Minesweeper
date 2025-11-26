@@ -1,7 +1,14 @@
-import { type FC } from 'react';
+import { type FC, useRef } from 'react';
 import classNames from 'classnames';
 import { MineIcon, FlagIcon } from '@/components/Icons';
-import { useAppSelector, useAppDispatch, openCell, setFlag } from '@/store';
+import {
+  useAppSelector,
+  useAppDispatch,
+  openCell,
+  setFlag,
+  pressCell,
+  openAroundCell,
+} from '@/store';
 import { EUserFieldState, EFieldState } from '@/types';
 import styles from './cell.module.scss';
 
@@ -19,7 +26,10 @@ export const Cell: FC<ICellProps> = ({ row, column }) => {
   const dispatch = useAppDispatch();
   const userStatus = useAppSelector(state => state.game.userField[row][column]);
   const mineStatus = useAppSelector(state => state.game.minefield[row][column]);
-  const isClosed = [EUserFieldState.CLOSED, EUserFieldState.FLAG].includes(userStatus);
+  const isGameOver = useAppSelector(state => state.game.gameover);
+  const timerRef = useRef<number | undefined>(undefined);
+  const isClosed = [EUserFieldState.CLOSED, EUserFieldState.PRESS, EUserFieldState.FLAG].includes(userStatus);
+  const isPress = userStatus === EUserFieldState.PRESS;
   const isBang = userStatus === EUserFieldState.BANG;
   const isFlag = userStatus === EUserFieldState.FLAG;
   const isNumberInfo = typeof mineStatus === 'number' && !isClosed;
@@ -29,18 +39,35 @@ export const Cell: FC<ICellProps> = ({ row, column }) => {
       className={classNames(
         styles.cell,
         isClosed && styles.closed,
+        isPress && styles.press,
         isBang && styles.bang,
         isNumberInfo && styles.numberInfo,
         isNumberInfo && styles[`numberInfo-${mineStatus}`],
+        isGameOver && isFlag && mineStatus !== EFieldState.MINE && styles.errorFlag
       )}
       onMouseDown={e => {
         switch (e.button) {
           case MOUSE_EVENT.left:
-            dispatch(openCell({ row, column }));
+            if (userStatus === EUserFieldState.CLOSED) {
+              dispatch(openCell({ row, column }));
+            }
+
+            timerRef.current = setTimeout(() => {
+              if (isNumberInfo) {
+                dispatch(pressCell({ row, column }));
+              }
+            }, 300);
             break;
           case MOUSE_EVENT.right:
             dispatch(setFlag({ row, column }));
             break;
+        }
+      }}
+      onMouseUp={() => {
+        clearTimeout(timerRef.current);
+
+        if (isNumberInfo) {
+          dispatch(openAroundCell({ row, column }));
         }
       }}
       onContextMenu={e => e.preventDefault()}>

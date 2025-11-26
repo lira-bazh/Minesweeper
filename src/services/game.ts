@@ -4,6 +4,8 @@ import { BASE_NUMBER } from '@/constants';
 import { type IGameSlice } from '@/store';
 
 export const GameService = {
+  flagCount: 0,
+
   getRandomCell(size: number): CellCoordinates {
     const x = Math.floor(Math.random() * size);
     const y = Math.floor(Math.random() * size);
@@ -65,7 +67,7 @@ export const GameService = {
   },
 
   openEmptyCell(row: number, column: number, state: IGameSlice): IGameSlice {
-    if (state.userField[row][column] === EUserFieldState.CLOSED) {
+    if ([EUserFieldState.CLOSED, EUserFieldState.PRESS].includes(state.userField[row][column])) {
       if (state.minefield[row][column] === EFieldState.EMPTY) {
         state.userField[row][column] = EUserFieldState.OPENED;
 
@@ -80,12 +82,18 @@ export const GameService = {
     return state;
   },
 
+  showResult(state: IGameSlice): void {
+    state.userField = state.userField.map(row =>
+      row.map(item => (item !== EUserFieldState.FLAG ? EUserFieldState.OPENED : item)),
+    );
+  },
+
   openCell(row: number, column: number, state: IGameSlice): IGameSlice {
     if (state.userField[row][column] !== EUserFieldState.FLAG) {
       const mineCell = state.minefield[row][column];
 
       if (mineCell === EFieldState.MINE) {
-        state.userField = state.userField.map(row => row.map(() => EUserFieldState.OPENED));
+        this.showResult(state);
         state.userField[row][column] = EUserFieldState.BANG;
         state.gameover = true;
       } else {
@@ -96,22 +104,58 @@ export const GameService = {
     return state;
   },
 
+  pressAroundCell(row: number, column: number, state: IGameSlice): IGameSlice {
+    this.neighborCellTraversal(state.size, row, column, (x, y) => {
+      if (state.userField[x][y] === EUserFieldState.CLOSED) {
+        state.userField[x][y] = EUserFieldState.PRESS;
+      }
+
+      if (state.userField[x][y] === EUserFieldState.FLAG) {
+        this.flagCount = (this.flagCount ?? 0) + 1;
+      }
+    });
+
+    return state;
+  },
+
+  openAroundCell(row: number, column: number, state: IGameSlice): IGameSlice {
+    this.neighborCellTraversal(state.size, row, column, (x, y) => {
+      if (state.userField[x][y] === EUserFieldState.PRESS) {
+        if (
+          state.minefield[x][y] !== EFieldState.MINE &&
+          this.flagCount === state.minefield[row][column]
+        ) {
+          this.openCell(x, y, state);
+          console.log('state.userField[x][y]', state.userField[x][y])
+        } else {
+          state.userField[x][y] = EUserFieldState.CLOSED;
+        }
+      }
+    });
+
+    this.flagCount = 0;
+
+    return state;
+  },
+
   setFlag(row: number, column: number, state: IGameSlice): IGameSlice {
     switch (state.userField[row][column]) {
       case EUserFieldState.CLOSED:
         state.userField[row][column] = EUserFieldState.FLAG;
+        state.numberOfFlags--;
 
         if (state.minefield[row][column] === EFieldState.MINE) {
           state.numberOfMines--;
 
           if (!state.numberOfMines) {
             state.gameover = true;
-            state.userField = state.userField.map(row => row.map(() => EUserFieldState.OPENED));
+            this.showResult(state);
           }
         }
         break;
       case EUserFieldState.FLAG:
         state.userField[row][column] = EUserFieldState.CLOSED;
+        state.numberOfFlags++;
 
         if (state.minefield[row][column] === EFieldState.MINE) {
           state.numberOfMines++;
