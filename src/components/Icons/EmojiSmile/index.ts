@@ -1,0 +1,1 @@
+export { EmojiSmileIcon } from './EmojiSmileIcon';

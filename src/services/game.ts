@@ -1,7 +1,7 @@
 import { EFieldState, EUserFieldState } from '@/types';
 import type { TFieldState, CellCoordinates } from '@/types';
 import { BASE_NUMBER } from '@/constants';
-import type { IGameSlice } from '@/store';
+import { type IGameSlice } from '@/store';
 
 export const GameService = {
   getRandomCell(size: number): CellCoordinates {
@@ -81,15 +81,44 @@ export const GameService = {
   },
 
   openCell(row: number, column: number, state: IGameSlice): IGameSlice {
-    const mineCell = state.minefield[row][column];
+    if (state.userField[row][column] !== EUserFieldState.FLAG) {
+      const mineCell = state.minefield[row][column];
 
-    if (mineCell === EFieldState.MINE) {
-      state.userField = state.userField.map(row => row.map(() => EUserFieldState.OPENED));
-      state.userField[row][column] = EUserFieldState.BANG;
-    } else {
-      state = this.openEmptyCell(row, column, state);
+      if (mineCell === EFieldState.MINE) {
+        state.userField = state.userField.map(row => row.map(() => EUserFieldState.OPENED));
+        state.userField[row][column] = EUserFieldState.BANG;
+        state.gameover = true;
+      } else {
+        state = this.openEmptyCell(row, column, state);
+      }
     }
 
     return state;
   },
+
+  setFlag(row: number, column: number, state: IGameSlice): IGameSlice {
+    switch (state.userField[row][column]) {
+      case EUserFieldState.CLOSED:
+        state.userField[row][column] = EUserFieldState.FLAG;
+
+        if (state.minefield[row][column] === EFieldState.MINE) {
+          state.numberOfMines--;
+
+          if (!state.numberOfMines) {
+            state.gameover = true;
+            state.userField = state.userField.map(row => row.map(() => EUserFieldState.OPENED));
+          }
+        }
+        break;
+      case EUserFieldState.FLAG:
+        state.userField[row][column] = EUserFieldState.CLOSED;
+
+        if (state.minefield[row][column] === EFieldState.MINE) {
+          state.numberOfMines++;
+        }
+        break;
+    }
+
+    return state;
+  }
 };

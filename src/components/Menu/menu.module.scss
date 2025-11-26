@@ -1,0 +1,84 @@
+@use '@/styles/fonts' as *;
+@use 'sass:color';
+
+.menu {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  line-height: 30px;
+
+  .counter {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    font-family: 'DigitTech7';
+    font-weight: 500;
+    font-size: 30px;
+    color: $error-color;
+  }
+
+  .icons {
+    svg {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+
+      path {
+        fill: $icon-color;
+      }
+
+      &:hover {
+        path {
+          fill: $icon-hover-color;
+        }
+      }
+
+      &:active {
+        path {
+          fill: $icon-color;
+        }
+      }
+    }
+  }
+
+  .emoji {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    .emojiIcon {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    gap: 5px;
+
+    .themeIcon {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      svg {
+        width: 25px;
+        height: 25px;
+      }
+    }
+
+  }
+}
+

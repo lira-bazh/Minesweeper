@@ -1,4 +1,4 @@
-export const Mine = () => {
+export const MineIcon = () => {
   return (
     <svg
       version="1.0"
@@ -30,4 +30,4 @@ export const Mine = () => {
       </g>
     </svg>
   );
-}
+};

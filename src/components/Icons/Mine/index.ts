@@ -1,1 +1,1 @@
-export { Mine } from './Mine';
+export { MineIcon } from './MineIcon';
