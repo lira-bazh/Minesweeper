@@ -1,8 +1,8 @@
 import { Row } from './components';
 import { useAppSelector } from '@/store';
-import styles from './field.module.scss';
+import styles from './GameField.module.scss';
 
-export const Field = () => {
+export const GameField = () => {
   const fields = useAppSelector(state => state.game.userField);
 
   return (
@@ -12,4 +12,4 @@ export const Field = () => {
       ))}
     </div>
   );
-}
+};

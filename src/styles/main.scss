@@ -14,7 +14,15 @@
   --icon-color-hover: #{$color-grey-2};
   --closed-cell: #{$color-beige-2};
   --closed-cell-hover: #{$color-beige-3};
-  --opened-cell-bcg: #{$color-beige-0};
+  --opened-cell-bg: #{$color-beige-0};
+  --modal-overlay-color: rgb(from #{$color-black} R G B/ 0.5);
+  --modal-text-color: #{$color-black};
+  --modal-bg-color: #{$color-beige-1};
+  --modal-shadow-color: rgb(from #{$color-black} R G B/ 0.3);
+  --btn-bg: #{$color-beige-4};
+  --btn-bg-hover: #{$color-beige-5};
+  --input-border-color: #{$color-beige-2};
+  --error-color: #{$error-color};
 }
 
 .dark-theme {
@@ -23,14 +31,14 @@
   --icon-color: #{$color-grey-1};
   --closed-cell: #{$color-beige-4};
   --closed-cell-hover: #{$color-beige-6};
-  --opened-cell-bcg: #{$color-beige-1};
+  --opened-cell-bg: #{$color-beige-1};
 }
 
 body {
   background-color: var(--bg-color);
   color: var(--font-color);
   font-size: 16px;
-  line-height: 19.49px;
+  line-height: $line-height-base;
   font-weight: 400;
   font-family: "Nunito", sans-serif;
   overflow-x: hidden;

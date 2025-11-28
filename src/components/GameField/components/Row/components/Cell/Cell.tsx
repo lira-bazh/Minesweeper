@@ -1,16 +1,13 @@
 import { type FC, useRef } from 'react';
 import classNames from 'classnames';
-import { MineIcon, FlagIcon } from '@/components/Icons';
+import { MineIcon, FlagIcon } from '@/ui/Icons';
 import {
   useAppSelector,
   useAppDispatch,
-  openCell,
-  setFlag,
-  pressCell,
-  openAroundCell,
 } from '@/store';
+import { openCell, setFlag, pressCell, openAroundCell } from '@/store/game'
 import { EUserFieldState, EFieldState } from '@/types';
-import styles from './cell.module.scss';
+import styles from './Cell.module.scss';
 
 interface ICellProps {
   row: number;

@@ -6,7 +6,7 @@ export interface IThemeProviderProps {
 }
 
 export const ThemeProvider: FC<IThemeProviderProps> = ({ children }) => {
-  const darkTheme = useAppSelector(state => state.game.isDarkTheme);
+  const darkTheme = useAppSelector(state => state.theme.isDarkTheme);
 
   useEffect(() => {
     if (darkTheme) {

@@ -1,0 +1,22 @@
+.customInput {
+  border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 16px;
+  width: 100%;
+  margin-top: 5px;
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:invalid, &.invalidInput {
+    border: var(--error-color) solid 3px;
+  }
+}
+
+.error {
+  width: 100%;
+  color: var(--error-color);
+  font-size: 80%;
+}

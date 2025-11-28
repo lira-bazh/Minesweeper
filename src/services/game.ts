@@ -1,7 +1,7 @@
 import { EFieldState, EUserFieldState } from '@/types';
 import type { TFieldState, CellCoordinates } from '@/types';
 import { BASE_NUMBER } from '@/constants';
-import { type IGameSlice } from '@/store';
+import { type IGameSlice } from '@/store/game';
 
 export const GameService = {
   flagCount: 0,
@@ -66,6 +66,27 @@ export const GameService = {
     return this.createEmptyField(size, EUserFieldState.CLOSED);
   },
 
+  getSavedUserSettings(): { size: number; numMines: number } {
+    return {
+      size: Number(localStorage.getItem('size') ?? BASE_NUMBER),
+      numMines: Number(localStorage.getItem('numMines') ?? BASE_NUMBER),
+    };
+  },
+
+  getInitialStateBySize(): IGameSlice {
+    const { size, numMines } = this.getSavedUserSettings();
+
+    return {
+      size,
+      startNumberOfMines: numMines,
+      numberOfMines: numMines,
+      numberOfFlags: numMines,
+      minefield: GameService.createFilledField(size, numMines),
+      userField: GameService.createUserField(size),
+      gameover: false,
+    };
+  },
+
   openEmptyCell(row: number, column: number, state: IGameSlice): IGameSlice {
     if ([EUserFieldState.CLOSED, EUserFieldState.PRESS].includes(state.userField[row][column])) {
       if (state.minefield[row][column] === EFieldState.EMPTY) {
@@ -126,7 +147,7 @@ export const GameService = {
           this.flagCount === state.minefield[row][column]
         ) {
           this.openCell(x, y, state);
-          console.log('state.userField[x][y]', state.userField[x][y])
+          console.log('state.userField[x][y]', state.userField[x][y]);
         } else {
           state.userField[x][y] = EUserFieldState.CLOSED;
         }
@@ -164,5 +185,10 @@ export const GameService = {
     }
 
     return state;
-  }
+  },
+
+  saveUserSettings(size: number, numMines: number): void {
+    localStorage.setItem('size', size.toString());
+    localStorage.setItem('numMines', numMines.toString());
+  },
 };

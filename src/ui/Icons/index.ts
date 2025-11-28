@@ -6,3 +6,4 @@ export { EmojiDeathIcon } from './EmojiDeath';
 export { SunIcon } from './Sun';
 export { MoonIcon } from './Moon';
 export { LikeIcon } from './Like';
+export { CloseIcon } from './Close';

@@ -1,69 +1,12 @@
 import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux';
-import { configureStore, createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { GameService } from '@/services/game';
-import { BASE_NUMBER } from '@/constants';
-import { EUserFieldState, type TFieldState } from '@/types';
+import { configureStore } from '@reduxjs/toolkit';
+import { themeSlice } from './theme';
+import { gameSlice } from './game';
 
-export interface IGameSlice {
-  size: number;
-  numberOfMines: number;
-  numberOfFlags: number;
-  minefield: TFieldState[][];
-  userField: EUserFieldState[][];
-  gameover: boolean;
-  isDarkTheme: boolean;
-}
-
-const initialState: IGameSlice = {
-  gameover: false,
-  size: BASE_NUMBER,
-  numberOfFlags: BASE_NUMBER,
-  numberOfMines: BASE_NUMBER,
-  minefield: GameService.createFilledField(),
-  userField: GameService.createUserField(),
-  isDarkTheme: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
-};
-
-const gameSlice = createSlice({
-  name: 'playingField',
-  initialState,
-  reducers: {
-    openCell: (state, action: PayloadAction<{ row: number; column: number }>) => {
-      const { row, column } = action.payload;
-      state = GameService.openCell(row, column, state);
-    },
-    pressCell: (state, action: PayloadAction<{ row: number; column: number }>) => {
-      const { row, column } = action.payload;
-      state = GameService.pressAroundCell(row, column, state);
-    },
-    openAroundCell: (state, action: PayloadAction<{ row: number; column: number }>) => {
-      const { row, column } = action.payload;
-      state = GameService.openAroundCell(row, column, state);
-    },
-    setFlag: (state, action: PayloadAction<{ row: number; column: number }>) => {
-      const { row, column } = action.payload;
-      state = GameService.setFlag(row, column, state);
-    },
-    reboot: (state) => {
-      state.gameover = false;
-      state.numberOfMines = BASE_NUMBER;
-      state.numberOfFlags = BASE_NUMBER;
-      state.minefield = GameService.createFilledField();
-      state.userField = GameService.createUserField();
-    },
-    changeTheme: (state) => {
-      state.isDarkTheme = !state.isDarkTheme;
-    },
-  },
-});
-
-// Экшены
-export const { openCell, pressCell, setFlag, reboot, changeTheme, openAroundCell } = gameSlice.actions;
-
-// Store
 export const store = configureStore({
   reducer: {
     game: gameSlice.reducer,
+    theme: themeSlice.reducer
   },
 });
 

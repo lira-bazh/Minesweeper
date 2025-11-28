@@ -1,7 +1,7 @@
 import { type FC } from 'react'
 import { Cell } from './components'
 import type { EUserFieldState } from '@/types';
-import syles from './row.module.scss'
+import syles from './Row.module.scss'
 
 interface IRowProps {
   row: EUserFieldState[];
