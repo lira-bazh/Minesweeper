@@ -1,73 +1,26 @@
-# React + TypeScript + Vite
+# Игра Сапёр
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Посетить: <a href="https://minesweeper-nu-orcin.vercel.app/">minesweeper-nu-orcin.vercel.app</a>
 
-Currently, two official plugins are available:
+<img src="./screen.png" width="350">
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Стэк: TypeScript, React, Redux Toolkit, Scss, CSS Modules, Vite
 
-## React Compiler
+## Об игре
+* Мины расставляются случайно;
+* Если рядом с открытым полем есть другие поля без мин поблизости, они открываются автоматически;
+* Правая клавиша ставит флажок - так отмечается место, где предполагается мина;
+* Клик по смайлику перезапускает игру;
+* После проигрыша смайлик заменяется на грустный, пользователю раскрывается карта мин;
+* После того, как пользователь открыл все поля кроме мин, игра заканчивается;
+* Счетчик показывает сколько осталось флажков;
+* При долгом нажатии на ячейку с цифрой, если количество флажков вокруг неё совпадает с цифрой, окружающие ячейки открываются автоматически;
+* В игре есть тёмная тема: если тема браузера тёмная, то темная тема ставится по умолчанию.
+* При переключении темы вручную установленное значение сохраняется в браузере;
+* Можно изменить размер поля и количество мин: поле может быть размером от 2 до 24 ячеек, количество мин должно быть больше 0, но меньше количества ячеек;
+* Установленные настройки сохраняются в браузере.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Как запустить?
+    npm install
+    npm run dev
+Запускается по адресу http://localhost:5173

@@ -109,6 +109,21 @@ export const GameService = {
     );
   },
 
+  checkClosedCell(state: IGameSlice): boolean {
+    for (let i = 0; i < state.size; i++) {
+      for (let j = 0; j < state.size; j++) {
+        if (
+          state.userField[i][j] === EUserFieldState.CLOSED &&
+          state.minefield[i][j] !== EFieldState.MINE
+        ) {
+          return false;
+        }
+      }
+    }
+
+    return true
+  },
+
   openCell(row: number, column: number, state: IGameSlice): IGameSlice {
     if (state.userField[row][column] !== EUserFieldState.FLAG) {
       const mineCell = state.minefield[row][column];
@@ -120,6 +135,12 @@ export const GameService = {
       } else {
         state = this.openEmptyCell(row, column, state);
       }
+    }
+
+    if (this.checkClosedCell(state)) {
+      state.gameover = true;
+      state.numberOfMines = 0;
+      this.showResult(state);
     }
 
     return state;
@@ -162,15 +183,17 @@ export const GameService = {
   setFlag(row: number, column: number, state: IGameSlice): IGameSlice {
     switch (state.userField[row][column]) {
       case EUserFieldState.CLOSED:
-        state.userField[row][column] = EUserFieldState.FLAG;
-        state.numberOfFlags--;
+        if (state.numberOfFlags) {
+          state.userField[row][column] = EUserFieldState.FLAG;
+          state.numberOfFlags--;
 
-        if (state.minefield[row][column] === EFieldState.MINE) {
-          state.numberOfMines--;
+          if (state.minefield[row][column] === EFieldState.MINE) {
+            state.numberOfMines--;
 
-          if (!state.numberOfMines) {
-            state.gameover = true;
-            this.showResult(state);
+            if (!state.numberOfMines) {
+              state.gameover = true;
+              this.showResult(state);
+            }
           }
         }
         break;

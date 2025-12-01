@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SettingsIcon } from '@/ui/Icons';
 import { Modal, Input } from '@/ui';
 import { useAppSelector, useAppDispatch } from '@/store';
@@ -8,9 +8,18 @@ import styles from './FieldSettings.module.scss';
 export const FieldSettings = () => {
   const dispatch = useAppDispatch();
   const [showModal, setShowModal] = useState(false);
-  const userSettings = useAppSelector(state => ({ fieldSize: state.game.size, numberOfMines: state.game.startNumberOfMines }));
-  const [fieldSize, setFieldSize] = useState(userSettings.fieldSize.toString());
-  const [numberOfMines, setNumberOfMines] = useState(userSettings.numberOfMines.toString());
+  const userSettingsSize = useAppSelector(state => state.game.size);
+  const userSettingsMines = useAppSelector(state => state.game.startNumberOfMines);
+  const [fieldSize, setFieldSize] = useState(userSettingsSize.toString());
+  const [numberOfMines, setNumberOfMines] = useState(userSettingsMines.toString());
+
+  useEffect(() => {
+    setFieldSize(userSettingsSize.toString());
+  }, [userSettingsSize]);
+
+  useEffect(() => {
+    setNumberOfMines(userSettingsMines.toString());
+  }, [userSettingsMines]);
 
   return (
     <>
@@ -25,8 +34,6 @@ export const FieldSettings = () => {
         show={showModal}
         close={() => {
           setShowModal(false);
-          setFieldSize(userSettings.fieldSize.toString());
-          setNumberOfMines(userSettings.numberOfMines.toString());
         }}
         okAction={() => {
           dispatch(
@@ -65,8 +72,8 @@ export const FieldSettings = () => {
           validation={value => {
             if (isNaN(Number(value))) {
               return 'Количество мин должно быть числом';
-            } else if (Number(value) <= 1) {
-              return 'Количество мин должно быть больше 1';
+            } else if (Number(value) < 1) {
+              return 'Количество мин должно быть больше 0';
             } else if (Number(fieldSize) * Number(fieldSize) < Number(value)) {
               return 'Количество мин должно быть меньше количества клеток';
             }

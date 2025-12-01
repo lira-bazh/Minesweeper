@@ -4,11 +4,11 @@ import { useAppSelector} from '@/store';
 import styles from './Menu.module.scss';
 
 export const Menu = () => {
-  const numberOfMines = useAppSelector(state => state.game.numberOfMines);
+  const numberOfFlags = useAppSelector(state => state.game.numberOfFlags);
 
   return (
     <div className={styles.menu}>
-      <div className={styles.counter}>{numberOfMines.toString().padStart(3, '0')}</div>
+      <div className={styles.counter}>{numberOfFlags.toString().padStart(3, '0')}</div>
       <div className={classNames(styles.emoji, styles.icons)}>
         <EmojiIcon />
       </div>
