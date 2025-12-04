@@ -67,6 +67,24 @@ export const Cell: FC<ICellProps> = ({ row, column }) => {
           dispatch(openAroundCell({ row, column }));
         }
       }}
+      onTouchStart={() => {
+        if (userStatus === EUserFieldState.CLOSED) {
+          dispatch(openCell({ row, column }));
+        }
+
+        timerRef.current = setTimeout(() => {
+          if (isNumberInfo) {
+            dispatch(pressCell({ row, column }));
+          }
+        }, 300);
+      }}
+      onTouchEnd={() => {
+        clearTimeout(timerRef.current);
+
+        if (isNumberInfo) {
+          dispatch(openAroundCell({ row, column }));
+        }
+      }}
       onContextMenu={e => e.preventDefault()}>
       {!isClosed && mineStatus === EFieldState.MINE && <MineIcon />}
       {isNumberInfo && mineStatus}

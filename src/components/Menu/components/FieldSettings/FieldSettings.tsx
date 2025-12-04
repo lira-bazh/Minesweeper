@@ -5,6 +5,32 @@ import { useAppSelector, useAppDispatch } from '@/store';
 import { changeUserSettings } from '@/store/game';
 import styles from './FieldSettings.module.scss';
 
+const validationFieldSize = (value: string, numberOfMines: string): string => {
+  if (isNaN(Number(value))) {
+    return 'Размер поля должен быть числом';
+  } else if (Number(value) <= 1) {
+    return 'Размер поля должен быть больше 1';
+  } else if (Number(value) > 24) {
+    return 'Размер поля должен быть меньше 25';
+  } else if (Number(value) * Number(value) < Number(numberOfMines)) {
+    return 'Количество мин должно быть меньше количества клеток';
+  }
+
+  return '';
+};
+
+const validationNumberOfMines = (value: string, fieldSize: string): string => {
+  if (isNaN(Number(value))) {
+    return 'Количество мин должно быть числом';
+  } else if (Number(value) < 1) {
+    return 'Количество мин должно быть больше 0';
+  } else if (Number(fieldSize) * Number(fieldSize) < Number(value)) {
+    return 'Количество мин должно быть меньше количества клеток';
+  }
+
+  return '';
+}
+
 export const FieldSettings = () => {
   const dispatch = useAppDispatch();
   const [showModal, setShowModal] = useState(false);
@@ -34,6 +60,8 @@ export const FieldSettings = () => {
         show={showModal}
         close={() => {
           setShowModal(false);
+          setFieldSize(userSettingsSize.toString());
+          setNumberOfMines(userSettingsMines.toString());
         }}
         okAction={() => {
           dispatch(
@@ -41,25 +69,17 @@ export const FieldSettings = () => {
           );
         }}
         okBtnText="Применить и перезапустить игру"
+        disabledOkBtn={
+          !!validationFieldSize(fieldSize, numberOfMines) ||
+          !!validationNumberOfMines(numberOfMines, fieldSize)
+        }
         className={styles.fieldSettingsModal}>
         <Input
           name="fieldSize"
           label="Размер поля"
           type="number"
           value={fieldSize.toString()}
-          validation={value => {
-            if (isNaN(Number(value))) {
-              return 'Размер поля должен быть числом';
-            } else if (Number(value) <= 1) {
-              return 'Размер поля должен быть больше 1';
-            } else if (Number(value) > 24) {
-              return 'Размер поля должен быть меньше 25';
-            } else if (Number(value) * Number(value) < Number(numberOfMines)) {
-              return 'Количество мин должно быть меньше количества клеток';
-            }
-
-            return '';
-          }}
+          validation={value => validationFieldSize(value, numberOfMines)}
           onChange={value => {
             setFieldSize(value);
           }}
@@ -69,17 +89,7 @@ export const FieldSettings = () => {
           label="Количество мин"
           type="number"
           value={numberOfMines.toString()}
-          validation={value => {
-            if (isNaN(Number(value))) {
-              return 'Количество мин должно быть числом';
-            } else if (Number(value) < 1) {
-              return 'Количество мин должно быть больше 0';
-            } else if (Number(fieldSize) * Number(fieldSize) < Number(value)) {
-              return 'Количество мин должно быть меньше количества клеток';
-            }
-
-            return '';
-          }}
+          validation={value => validationNumberOfMines(value, fieldSize)}
           onChange={value => setNumberOfMines(value)}
         />
       </Modal>

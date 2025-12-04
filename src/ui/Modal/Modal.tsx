@@ -12,9 +12,19 @@ interface IModalProps {
   children?: ReactNode;
   okBtnText?: string;
   className?: string;
+  disabledOkBtn?: boolean;
 }
 
-export const Modal: FC<IModalProps> = ({ show, close, okAction, title = '', children, okBtnText = 'OK', className }) => {
+export const Modal: FC<IModalProps> = ({
+  show,
+  close,
+  okAction,
+  title = '',
+  children,
+  okBtnText = 'OK',
+  className,
+  disabledOkBtn = false,
+}) => {
   return (
     <>
       {show && (
@@ -35,6 +45,7 @@ export const Modal: FC<IModalProps> = ({ show, close, okAction, title = '', chil
                   okAction();
                   close();
                 }}
+                disabled={disabledOkBtn}
               />
             </div>
           </div>

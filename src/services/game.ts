@@ -77,7 +77,7 @@ export const GameService = {
     const { size, numMines } = this.getSavedUserSettings();
 
     return {
-      size,
+      size: BASE_NUMBER,
       startNumberOfMines: numMines,
       numberOfMines: numMines,
       numberOfFlags: numMines,
@@ -137,7 +137,7 @@ export const GameService = {
       }
     }
 
-    if (this.checkClosedCell(state)) {
+    if (!state.gameover && this.checkClosedCell(state)) {
       state.gameover = true;
       state.numberOfMines = 0;
       this.showResult(state);
